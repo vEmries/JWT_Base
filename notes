@@ -1,0 +1,20 @@
+Teoretycznie działa ALE
+
+W WebSecurityConfig dodana jest linia 68, której teoretycznie nie musi tam być
+    .antMatchers("/user/**", "/protected/**").permitAll()
+Wszystko co nie ma permitAll() zwraca 401. Obejściem jest dodanie permitAll() dla wszystkich restów/ścieżek i późniejsze
+ograniczanie już w kontrolerach adnotacją
+    @PreAuthorize("hasRole('ADMIN')")
+
+W JwtAuthorizationTokenFilter usunięta jest część warunku w 61
+    Oryginialny wyglądał tak:
+    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null)
+Z jakiegoś powodu context nigdy nie jest pusty, przez co nie sprawdza ról dla usera i zawsze zwraca 401
+
+^^ chyba naprawione, zostawiam jakby znowu zdechło
+
+ToDo:
+
+Autoryzacja
+    -> przekazywanie tokenu przy zmianie url (sesja działa dobrze, tylko gubi token)
+    -> /logout nie ubija sesji, tylko token
